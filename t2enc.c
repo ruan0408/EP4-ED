@@ -108,6 +108,38 @@ void st_lema_dump(void (*visit)(Item_lema))
                 visit(t->item);
 }
 
+void st_lema_sort(void (*visit)(Item_lema))
+{
+    int i,j;
+    link t;
+    Item_lema *v = mallocSafe(N*sizeof(Item_lema));
+
+    for (j = 0, i = 0; i < M; i++)
+        if (heads[i] != z)
+            for (t = heads[i]; t != z; t = t->next)
+                v[j++] = t->item;
+
+    qsort(v, N, sizeof(Item_lema), lema_cmp);
+    for(i = 0; i < N; i++)
+        visit(v[i]);
+}
+
+void st_lema_free()
+{
+    int i;
+    link t;
+    for (i = 0; i < M; i++)
+        while ((t = heads[i]) != z)
+        {
+            heads[i] = heads[i]->next;
+            item_lema_free(t->item);
+            free(t);
+        }
+    free(z);
+    free(heads);
+    heads = NULL;
+    z = NULL;
+}
 /*void st_lema_show_histogram()
 {
     int i, j, no_per_list, max_list = -1;

@@ -88,3 +88,18 @@ void printLema(char* lema)
         putchar(lema[i]);
 }
 
+int str_cmp(char *v1, char *v2)
+{
+    int flag1, flag2;
+    int i = 0;
+    while(v1[i] != ' ' && v2[i] != ' ' && v1[i] != '\0' && v2[i] != '\0'  && v1[i] != ']' && v2[i] != ']' && v1[i] == v2[i])i++;
+    flag1 = (v1[i] == ' ' || v1[i] == '\0' || v1[i] == ']');
+    flag2 = (v2[i] == ' ' || v2[i] == '\0' || v2[i] == ']');
+
+    if(flag1 && flag2) return 0;
+    if(flag1 && !flag2) return -1;
+    if(!flag1 && flag2) return 1;
+    if(v1[i] < v2[i]) return -1;
+    return 1;
+}
+

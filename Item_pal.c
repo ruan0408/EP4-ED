@@ -30,6 +30,11 @@ int eq_pal(Key_pal a, Key_pal b)
     return FALSE;
 }
 
+int pal_cmp(const void* item1, const void* item2)
+{
+    return str_cmp((*(Item_pal*)(item1)).palavra, (*(Item_pal*)(item2)).palavra);
+}
+
 /*Printa uma frase*/
 void printSent(char* sent)
 {

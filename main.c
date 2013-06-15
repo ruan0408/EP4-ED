@@ -86,23 +86,23 @@ int main(int argc, char* argv[])
                 if(L)
                 {
                     printf("Lista com todos os lemas que são palavras e suas respectivas palavras: \n");
-                    /*st_lema_sort(visit_list_palavras);*/
+                    st_lema_sort(visit_list_palavras);
                     printf("\n");
                 }
                 if(l)
                 {
                     printf("Lista com todos os lemas que são palavras: \n");
-                    /*st_lema_sort(visit_lema);*/
+                    st_lema_sort(visit_lema);
                 }
                 if(t)
                 {
                     printf("Lista com todos os tokens: \n");
-                    /*st_pal_sort(visit_tokens);*/
+                    st_pal_sort(visit_tokens);
                 }
                 if(d)
                 {
                     printf("Lista com todas as palavras: \n");
-                    /*st_pal_sort(visit_palavras);*/
+                    st_pal_sort(visit_palavras);
                 }
                 if(s)
                 {
@@ -117,8 +117,8 @@ int main(int argc, char* argv[])
                 }
                 if(F)/*Desaloca-se tudo para poder encerrar o programa*/
                 {
-                    /*st_pal_free();
-                    st_lema_free();*/
+                    st_pal_free();
+                    st_lema_free();
                     free(buffer);
                     free(str);
                     fclose(arq);

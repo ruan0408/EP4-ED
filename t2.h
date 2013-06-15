@@ -12,9 +12,9 @@ int st_lema_count();
 void st_lema_insert(Item_lema);
 Item_lema st_lema_search(Key_lema);
 void st_lema_sort(void (*visit)(Item_lema));
-Item_lema st_lema_select(int);
-void st_lema_show_histogram();
+/*Item_lema st_lema_select(int);
+void st_lema_show_histogram();*/
 void st_lema_dump(void (*visit)(Item_lema));
-
+void st_lema_free();
 
 #endif /* st_lema_H_INCLUDED*/

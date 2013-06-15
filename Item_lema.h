@@ -20,6 +20,7 @@ typedef struct
 Key_lema key_lema(Item_lema item);
 int less_lema(Key_lema a, Key_lema b);
 int eq_lema(Key_lema a, Key_lema b);
+int lema_cmp(const void* item1, const void* item2);
 void visit_list_palavras(Item_lema item);
 void visit_lema(Item_lema item);
 void item_lema_free(Item_lema item);

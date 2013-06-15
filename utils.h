@@ -14,6 +14,7 @@ void *mallocSafe(size_t n);
 int prime_m(int m);
 int hash(char *v, int M);
 int ePalavra(char *token);
+int str_cmp(char *v1, char *v2);
 void printToken(char* pal);
 void printLema(char* lema);
 

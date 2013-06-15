@@ -87,7 +87,7 @@ static void reHash()
     heads = aux;
     aux = NULL;
     M = K;
- }
+}
 
 void st_pal_insert(Item_pal item)
 {
@@ -109,6 +109,38 @@ void st_pal_dump(void (*visit)(Item_pal))
                 visit(t->item);
 }
 
+void st_pal_sort(void (*visit)(Item_pal))
+{
+    int i, j;
+    link t;
+    Item_pal *v = mallocSafe(N*sizeof(Item_pal));
+
+    for (j = 0, i = 0; i < M; i++)
+        if (heads[i] != z)
+            for (t = heads[i]; t != z; t = t->next)
+                v[j++] = t->item;
+
+    qsort(v, N, sizeof(Item_pal), pal_cmp);
+    for(i = 0; i < N; i++)
+        visit(v[i]);
+}
+
+void st_pal_free()
+{
+    int i;
+    link t;
+    for (i = 0; i < M; i++)
+        while ((t = heads[i]) != z)
+        {
+            heads[i] = heads[i]->next;
+            item_pal_free(t->item);
+            free(t);
+        }
+    free(z);
+    free(heads);
+    heads = NULL;
+    z = NULL;
+}
 /*void st_pal_show_histogram()
 {
     int i, j, no_per_list, max_list = -1;

@@ -31,6 +31,11 @@ int eq_lema(Key_lema a, Key_lema b)
     return FALSE;
 }
 
+int lema_cmp(const void* item1,const void* item2)
+{
+    return str_cmp((*(Item_lema*)(item1)).lema, (*(Item_lema*)(item2)).lema);
+}
+
 /*Printa a lista de palavras de item*/
 void visit_list_palavras(Item_lema item)
 {

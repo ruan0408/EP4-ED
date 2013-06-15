@@ -90,6 +90,35 @@ Item_pal st_pal_search(Key_pal v)
     return NULLitem_pal;
 }
 
+void st_pal_dump(void (*visit)(Item_pal))
+{
+    int i;
+    for (i = 0; i < M; i++)
+        if(!null(i)) visit(st_pal[i]);
+}
+
+void st_pal_sort(void (*visit)(Item_pal))
+{
+    int i, j;
+    Item_pal *v = mallocSafe(N*sizeof(Item_pal));
+
+    for (j = 0, i = 0; i < M; i++)
+        if (!null(i)) v[j++] = st_pal[i];
+
+    qsort(v, N, sizeof(Item_pal), pal_cmp);
+    for(i = 0; i < N; i++)
+        visit(v[i]);
+}
+
+void st_pal_free()
+{
+    int i;
+    for (i = 0; i < M; i++)
+        if(!null(i)) item_pal_free(st_pal[i]);
+
+    free(st_pal);
+    st_pal = NULL;
+}
 /*void st_pal_delete(Item_pal item)
 {
     int j, i = hash(key_pal(item), M);

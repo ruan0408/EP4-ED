@@ -21,6 +21,7 @@ typedef struct
 Key_pal key_pal(Item_pal item);
 int less_pal(Key_pal a, Key_pal b);
 int eq_pal(Key_pal a, Key_pal b);
+int pal_cmp(const void* item1, const void* item2);
 void printSent(char* sent);
 void printSentID(char* id);
 void printSentAnot(char* anot);
