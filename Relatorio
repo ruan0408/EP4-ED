@@ -1,0 +1,47 @@
+A principio, o texto todo é armazenado em char* buffer, por meio da função getLine.
+Os '\n' são preservados(serão usados na analise to texto), e é adicionado um '\0' ao final de buffer.
+
+Para este ep foram utilizadas duas estruturas de dados, ARNE(árvore rubro negra esquerdista) e lista ligada.
+Como sugerido no enunciado, são duas ARNE, st_pal (T1) e st_lema (T2). 
+
+T1 lida com item_pal, que é uma estrutura que guarda o token(palavra),
+o lema, e um ponteiro para uma lista ligada onde cada celula(que é do tipo Celula_sent) guarda uma variavel do tipo Sentenca, que é outra estrutura que guarda 3 ponteiros para caracter, um para o ID da sentença, outro para a sentença em si, e outro para a sentença anotada.
+A chave para T1 é Key_pal, que é simplesmente o token(palavra).
+
+T2 lida com item_lema, que guarda o lema e o ponteiro para a cabeça de uma lista ligada, onde cada célula(do tipo Celula_pal) guarda um token (palavra). A chave para T2 é Key_lema, que pe simplesmente o lema.
+
+OBS: As informações: token, lema e sentença(as 3) são guardadas por meio de ponteiros para o inicio de cada uma delas, ou seja, ponteiros para posições do buffer.
+
+Em resumo temos:
+
+T1(st_pal):  Item: Item_pal
+	     Item_pal: palavra(token), lema, ponteiro para cabeça de lista de sentenças(Celula_sent).
+	     Sentenca: 3 ponteiros, um para cada informação: ID da sentença, sentença e sentença anotada.
+	     Chave: Key_pal.
+
+T2(st_lema): Item: Item_lema
+	     Item_lema: lema, ponteiro para cabeça de lista de palavras(Celula_pal).
+	     Chave: Key_lema.
+
+Como guardo apenas o inicio de cada informação, são necessarios criterios para saber onde cada informaçao termina. Estes estão descritos abaixo:
+
+Token: termina quando encontrarmos um ' '(espaço)
+Lema: termina quando encontrarmos um ']'
+ID da sentença: termina ao encontrarmos '\n'
+Sentença: termina quando encontrarmos a sequencia de caracteres '[''T''e''x''t''='
+Sentença anotada: termina ao encontrarmos '\n'
+
+Estes são os mesmos critérios utilizados no processamento do texto.
+
+O método de busca das palavras é identico ao explanado no enunciado. Procura-se a palavra em T1, acha-se seu respectivo lema, procura-se o lema em T2, e utiliza-se da lista ligada de palavras para procurar em T1 novamente.
+
+Devido a ambiguidade da explicação de algumas opções no enunciado, deixo aqui explicitado o que cada opção faz, que foi o que eu entendi que deveriam fazer:
+
+-t: Lista de todos os TOKENS presentes no texto, ou seja, printa cada key_pal de T1(st_pal), em ordem alfabética e linha por linha
+-d: Lista de todas as PALAVRAS (tokens contendo apenas letras), ou seja, printa key_pal de T1(st_pal) de todos os tokens que são
+    palavras, linha por linha em ordem alfabética.
+-l: Lista de todas as PALAVRAS presentes no texto em sua versão LEMATIZADA, linha por linha em ordem alfabética.
+-L: Lista de todos os LEMAS que são PALAVRAS, seguido de todas as palavras no texto que tem aquele lema.
+    (Essa é onde o enunciado é mais ambiguo).
+-s: Número de sentenças no texto, número total de tokens no texto (com repetições), número total de palavras no texto (com repetições)
+    número total de tokens distintos, número total de palavras distintas e número total de lemas distintos.
