@@ -1,8 +1,6 @@
 
-IMPORTANTE: Para alterar entre as implementações das tabelas, basta mudar nas linhas 8 e 10 do makefile, os respectivos .c.
-	    Os nomes estão iguais ao do enunciado, isto é, t1enc.c t2enc.c t1lp.c t2lp.c.
-	    O EP utiliza um buffer para armazenar o texto na memória, e portanto, arquivos muito grandes (por exemplo +4 biblias)
-	    deveram ser passados pelo FILTRO que o prof. Yoshi disponibilizou no paca.
+IMPORTANTE: O EP utiliza um buffer para armazenar o texto na memória, e portanto, arquivos muito grandes (por exemplo +4 biblias)
+	    deveram ser passados pelo FILTRO que o prof. Yoshi disponibilizou no paca. Caso contrário  ocorrerá erro na alocação de memória.
 
 ==============================================================================================================================================
 A principio, o texto todo é armazenado em char* buffer, por meio da função getLine.

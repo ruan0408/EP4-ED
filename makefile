@@ -1,13 +1,26 @@
 CC = gcc
-CFLAGS = -ansi -Wall -pedantic -g
+CFLAGS = -ansi -Wall -pedantic
 
-ep4: main.o t1.o t2.o Item_pal.o Item_lema.o Lista_pal.o Lista_sent.o getLine.o utils.o
+all: ep4encenc ep4enclp ep4lpenc ep4lplp
+
+ep4encenc: main.o t1enc.o t2enc.o Item_pal.o Item_lema.o Lista_pal.o Lista_sent.o getLine.o utils.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
+ep4enclp: main.o t1enc.o t2lp.o Item_pal.o Item_lema.o Lista_pal.o Lista_sent.o getLine.o utils.o
+	$(CC) $(CFLAGS) $^ -o $@ -lm
+ep4lpenc: main.o t1lp.o t2enc.o Item_pal.o Item_lema.o Lista_pal.o Lista_sent.o getLine.o utils.o
+	$(CC) $(CFLAGS) $^ -o $@ -lm
+ep4lplp: main.o t1lp.o t2lp.o Item_pal.o Item_lema.o Lista_pal.o Lista_sent.o getLine.o utils.o
+	$(CC) $(CFLAGS) $^ -o $@ -lm
+
 main.o: main.c t1.h t2.h getLine.h
 	$(CC) $(CFLAGS) -c $<
-t1.o: t1enc.c t1.h utils.h
+t1enc.o: t1enc.c t1.h utils.h
 	$(CC) $(CFLAGS) -c $< -o $@
-t2.o: t2enc.c t2.h utils.h
+t2enc.o: t2enc.c t2.h utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+t1lp.o: t1lp.c t1.h utils.h
+	$(CC) $(CFLAGS) -c $< -o $@
+t2lp.o: t2lp.c t2.h utils.h
 	$(CC) $(CFLAGS) -c $< -o $@
 Item_pal.o: Item_pal.c Item_pal.h
 	$(CC) $(CFLAGS) -c $<
