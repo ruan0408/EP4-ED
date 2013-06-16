@@ -1,8 +1,16 @@
+
+IMPORTANTE: Para alterar entre as implementações das tabelas, basta mudar nas linhas 8 e 10 do makefile, os respectivos .c.
+	    Os nomes estão iguais ao do enunciado, isto é, t1enc.c t2enc.c t1lp.c t2lp.c.
+	    O EP utiliza um buffer para armazenar o texto na memória, e portanto, arquivos muito grandes (por exemplo +4 biblias)
+	    deveram ser passados pelo FILTRO que o prof. Yoshi disponibilizou no paca.
+
+==============================================================================================================================================
 A principio, o texto todo é armazenado em char* buffer, por meio da função getLine.
 Os '\n' são preservados(serão usados na analise to texto), e é adicionado um '\0' ao final de buffer.
 
-Para este ep foram utilizadas duas estruturas de dados, ARNE(árvore rubro negra esquerdista) e lista ligada.
-Como sugerido no enunciado, são duas ARNE, st_pal (T1) e st_lema (T2). 
+Para este ep foram utilizadas duas estruturas de dados, Tabelas de espalhamento e lista ligada.
+Como sugerido no enunciado, são duas tabelas, st_pal (T1) e st_lema (T2).
+Como dito no enunciado, cada tabela pode ser implementada com encadeamento ou pribing linear.
 
 T1 lida com item_pal, que é uma estrutura que guarda o token(palavra),
 o lema, e um ponteiro para uma lista ligada onde cada celula(que é do tipo Celula_sent) guarda uma variavel do tipo Sentenca, que é outra estrutura que guarda 3 ponteiros para caracter, um para o ID da sentença, outro para a sentença em si, e outro para a sentença anotada.

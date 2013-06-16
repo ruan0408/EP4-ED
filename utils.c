@@ -35,6 +35,7 @@ static int p[] =
     2147483647
 };
 
+/*Malloc que aborta o programa em caso de não conseguir alocar memória*/
 void *mallocSafe(size_t n)
 {
     void *pt;
@@ -47,6 +48,7 @@ void *mallocSafe(size_t n)
     return pt;
 }
 
+/*Pega o primo mais proximo de m no vetor p*/
 int prime_m(int m)
 {
     int x;
@@ -57,6 +59,7 @@ int prime_m(int m)
         return p[x - 8];
 }
 
+/*Função de hash*/
 int hash(char *v, int M)
 {
     int h = 0, a = 127;
@@ -88,6 +91,7 @@ void printLema(char* lema)
         putchar(lema[i]);
 }
 
+/*Similar ao strcmp, porém admite os delimitadores ']' e ' ' também */
 int str_cmp(char *v1, char *v2)
 {
     int flag1, flag2;
