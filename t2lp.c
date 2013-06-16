@@ -10,6 +10,7 @@
 #include "utils.h"
 
 /*Estrutura pega do site do Yoshi. Levemente alterada*/
+/*TABELA DE ESPALHAMENTO COM RESOLUÇÃO DE COLISÕES POR LINEAR PROBING*/
 
 #define o ++n_probes
 #define null(A) (st_lema[A].lema == NULLitem_lema.lema)
@@ -28,7 +29,8 @@ Item_lema st_lema_get_NULLitem()
     return NULLitem_lema;
 }
 
-void st_lema_init(int max)
+/*Inicia tabela com M primo pequeno e arbitrrio*/
+void st_lema_init()
 {
     int i;
     N = 0;
@@ -36,11 +38,15 @@ void st_lema_init(int max)
     st_lema = mallocSafe(M*sizeof(Item_lema));
     for (i = 0; i < M; i++) st_lema[i] = NULLitem_lema;
 }
+
+/*Numero de elementos na tabela*/
 int st_lema_count()
 {
     return N;
 }
 
+/*Função que torna o hash dinamico.
+   Dobra o tamanho da tabela e reinsere os elementos*/
 static void reHash()
 {
     int K, i;
@@ -63,6 +69,7 @@ static void reHash()
     M = K;
 }
 
+/*Insere um item na tabela, se preciso, aumenta ela*/
 void st_lema_insert(Item_lema item)
 {
     Key_lema v;
@@ -74,6 +81,8 @@ void st_lema_insert(Item_lema item)
     st_lema[i] = item;
     N++;
 }
+
+/*Procura chave na tabela*/
 Item_lema st_lema_search(Key_lema v)
 {
     int i = hash(v, M);
@@ -88,7 +97,26 @@ Item_lema st_lema_search(Key_lema v)
     n_probes_miss+=n_probes-t;
     return NULLitem_lema;
 }
+/*Deleta um item da tabela. É necessario reinserção.*/
+void st_lema_delete(Item_lema item)
+{
+    int j, i = hash(key_lema(item), M);
+    Item_lema v;
+    while (!null(i))
+        if (eq_lema(key_lema(item), key_lema(st_lema[i]))) break;
+        else i = (i+1) % M;
+    if (null(i)) return;
+    st_lema[i] = NULLitem_lema;
+    N--;
+    for (j = i+1; !null(j); j = (j+1) % M, N--)
+    {
+        v = st_lema[j];
+        st_lema[j] = NULLitem_lema;
+        st_lema_insert(v);
+    }
+}
 
+/*Executa a função visit em cada item da tabela*/
 void st_lema_dump(void (*visit)(Item_lema))
 {
     int i;
@@ -96,6 +124,7 @@ void st_lema_dump(void (*visit)(Item_lema))
         if(!null(i)) visit(st_lema[i]);
 }
 
+/*Executa a função visit em cada item, sendo que eles estão ordenados*/
 void st_lema_sort(void (*visit)(Item_lema))
 {
     int i, j;
@@ -107,8 +136,10 @@ void st_lema_sort(void (*visit)(Item_lema))
     qsort(v, N, sizeof(Item_lema), lema_cmp);
     for(i = 0; i < N; i++)
         visit(v[i]);
+    free(v);
 }
 
+/*Libera espaço ocupado pela tabela e por seus items*/
 void st_lema_free()
 {
     int i;
@@ -118,37 +149,3 @@ void st_lema_free()
     free(st_lema);
     st_lema = NULL;
 }
-/*void st_lema_delete(Item_lema item)
-{
-    int j, i = hash(key_lema(item), M);
-    Item_lema v;
-    while (!null(i))
-        if eq_lema(key_lema(item), key_lema(st_lema[i])) break;
-        else i = (i+1) % M;
-    if (null(i)) return;
-    st_lema[i] = NULLitem_lema;
-    N--;
-    for (j = i+1; !null(j); j = (j+1) % M, N--)
-    {
-        v = st_lema[j];
-        st_lema[j] = NULLitem_lema;
-        st_lema_insert(v);
-    }
-}*/
-
-/*void st_lema_show_all(int n_items)
-{
-    int i;
-
-    for (i=0; i<M; i++)
-        if (!null(i)) ITEMshow(st_lema[i]);
-
-    printf("\nFinal table load factor: %g\n", (double)N/M);
-    printf("Total number of probes: %ld\n", n_probes);
-    printf("Average number of probes per item: %g\n",
-           (double)n_probes/n_items);
-    printf("Average number of probes per miss: %g\n",
-           (double)n_probes_miss/N);
-    printf("Average number of probes per hit: %g\n\n",
-           (double)n_probes_hit/(n_items-N));
-}*/

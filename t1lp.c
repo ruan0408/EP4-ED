@@ -10,6 +10,7 @@
 #include "utils.h"
 
 /*Estrutura pega do site do Yoshi. Levemente alterada*/
+/*TABELA DE ESPALHAMENTO COM RESOLUÇÃO DE COLISÕES POR LINEAR PROBING*/
 
 #define o ++n_probes
 #define null(A) (st_pal[A].palavra == NULLitem_pal.palavra)
@@ -29,7 +30,8 @@ Item_pal st_pal_get_NULLitem()
     return NULLitem_pal;
 }
 
-void st_pal_init(int max)
+/*Inicia tabela com M primo pequeno e arbitrrio*/
+void st_pal_init()
 {
     int i;
     N = 0;
@@ -37,11 +39,15 @@ void st_pal_init(int max)
     st_pal = mallocSafe(M*sizeof(Item_pal));
     for (i = 0; i < M; i++) st_pal[i] = NULLitem_pal;
 }
+
+/*Numero de elementos na tabela*/
 int st_pal_count()
 {
     return N;
 }
 
+/*Função que torna o hash dinamico.
+   Dobra o tamanho da tabela e reinsere os elementos*/
 static void reHash()
 {
     int K, i;
@@ -64,6 +70,7 @@ static void reHash()
     M = K;
 }
 
+/*Insere um item na tabela, se preciso, aumenta ela*/
 void st_pal_insert(Item_pal item)
 {
     Key_pal v;
@@ -75,6 +82,8 @@ void st_pal_insert(Item_pal item)
     st_pal[i] = item;
     N++;
 }
+
+/*Procura chave na tabela*/
 Item_pal st_pal_search(Key_pal v)
 {
     int i = hash(v, M);
@@ -90,6 +99,26 @@ Item_pal st_pal_search(Key_pal v)
     return NULLitem_pal;
 }
 
+/*Deleta um item da tabela. É necessario reinserção.*/
+void st_pal_delete(Item_pal item)
+{
+    int j, i = hash(key_pal(item), M);
+    Item_pal v;
+    while (!null(i))
+        if (eq_pal(key_pal(item), key_pal(st_pal[i]))) break;
+        else i = (i+1) % M;
+    if (null(i)) return;
+    st_pal[i] = NULLitem_pal;
+    N--;
+    for (j = i+1; !null(j); j = (j+1) % M, N--)
+    {
+        v = st_pal[j];
+        st_pal[j] = NULLitem_pal;
+        st_pal_insert(v);
+    }
+}
+
+/*Executa a função visit em cada item da tabela*/
 void st_pal_dump(void (*visit)(Item_pal))
 {
     int i;
@@ -97,6 +126,7 @@ void st_pal_dump(void (*visit)(Item_pal))
         if(!null(i)) visit(st_pal[i]);
 }
 
+/*Executa a função visit em cada item, sendo que eles estão ordenados*/
 void st_pal_sort(void (*visit)(Item_pal))
 {
     int i, j;
@@ -108,8 +138,10 @@ void st_pal_sort(void (*visit)(Item_pal))
     qsort(v, N, sizeof(Item_pal), pal_cmp);
     for(i = 0; i < N; i++)
         visit(v[i]);
+    free(v);
 }
 
+/*Libera espaço ocupado pela tabela e por seus items*/
 void st_pal_free()
 {
     int i;
@@ -119,37 +151,3 @@ void st_pal_free()
     free(st_pal);
     st_pal = NULL;
 }
-/*void st_pal_delete(Item_pal item)
-{
-    int j, i = hash(key_pal(item), M);
-    Item_pal v;
-    while (!null(i))
-        if eq_pal(key_pal(item), key_pal(st_pal[i])) break;
-        else i = (i+1) % M;
-    if (null(i)) return;
-    st_pal[i] = NULLitem_pal;
-    N--;
-    for (j = i+1; !null(j); j = (j+1) % M, N--)
-    {
-        v = st_pal[j];
-        st_pal[j] = NULLitem_pal;
-        st_pal_insert(v);
-    }
-}*/
-
-/*void st_pal_show_all(int n_items)
-{
-    int i;
-
-    for (i=0; i<M; i++)
-        if (!null(i)) ITEMshow(st_pal[i]);
-
-    printf("\nFinal table load factor: %g\n", (double)N/M);
-    printf("Total number of probes: %ld\n", n_probes);
-    printf("Average number of probes per item: %g\n",
-           (double)n_probes/n_items);
-    printf("Average number of probes per miss: %g\n",
-           (double)n_probes_miss/N);
-    printf("Average number of probes per hit: %g\n\n",
-           (double)n_probes_hit/(n_items-N));
-}*/

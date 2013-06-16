@@ -2,12 +2,12 @@ CC = gcc
 CFLAGS = -ansi -Wall -pedantic -g
 
 ep4: main.o t1.o t2.o Item_pal.o Item_lema.o Lista_pal.o Lista_sent.o getLine.o utils.o
-	$(CC) $(CFLAGS) $^ -o ep4 -lm
+	$(CC) $(CFLAGS) $^ -o $@ -lm
 main.o: main.c t1.h t2.h getLine.h
 	$(CC) $(CFLAGS) -c $<
-t1.o: t1lp.c t1.h utils.h
+t1.o: t1enc.c t1.h utils.h
 	$(CC) $(CFLAGS) -c $< -o $@
-t2.o: t2lp.c t2.h utils.h
+t2.o: t2enc.c t2.h utils.h
 	$(CC) $(CFLAGS) -c $< -o $@
 Item_pal.o: Item_pal.c Item_pal.h
 	$(CC) $(CFLAGS) -c $<
